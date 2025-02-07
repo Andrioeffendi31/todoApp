@@ -2,6 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarOpen } from "@/state";
+import { useGetProjectsQuery } from "@/state/api";
 import {
   AlertCircle,
   AlertOctagon,
@@ -31,9 +32,9 @@ const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(true);
   const [showPriority, setShowPriority] = useState(true);
 
+  const { data: projects, isFetching } = useGetProjectsQuery();
   const dispatch = useAppDispatch();
   const isSidebarOpen = useAppSelector((state) => state.global.isSidebarOpen);
-  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl 
   transition-all duration-300 ease-in-out h-full z-40 dark:bg-black overflow-y-auto bg-white
@@ -91,10 +92,32 @@ const Sidebar = () => {
           <ChevronIcon isOpen={showProjects} />
         </button>
 
-        {/* project links */}
+        {/* project list */}
+        <div
+          className={`flex flex-col transition-all duration-300 ${
+            showProjects ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          } overflow-hidden`}
+        >
+          {projects ? (
+            projects.map((project) => (
+              <SidebarLink
+                key={project.id}
+                href={`/project/${project.id}`}
+                icon={Briefcase}
+                label={project.name}
+              />
+            ))
+          ) : (
+            <div className="px-8 py-3 text-gray-500">
+              {isFetching ? "Loading projects..." : "No projects"}
+            </div>
+          )}
+        </div>
+
+        {/* priorities links */}
         <button
           onClick={() => setShowPriority((prev) => !prev)}
-          className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
+          className="flex w-full items-center justify-between px-8 py-3 text-gray-500 overflow-hidden"
         >
           <span className="">Priority</span>
           <ChevronIcon isOpen={showPriority} />
