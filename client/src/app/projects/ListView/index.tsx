@@ -14,6 +14,8 @@ const ListView = ({ id, setIsModalNewTaskOpen }: Props) => {
     error,
     isLoading,
   } = useGetTasksQuery({ projectId: Number(id) });
+  
+  const role = localStorage.getItem("role");
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred while fetching tasks</div>;
@@ -27,6 +29,7 @@ const ListView = ({ id, setIsModalNewTaskOpen }: Props) => {
             <button
               className="flex items-center rounded bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
               onClick={() => setIsModalNewTaskOpen(true)}
+              disabled={role !== "Lead"}
             >
               Add Task
             </button>

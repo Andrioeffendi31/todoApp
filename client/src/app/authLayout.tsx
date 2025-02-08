@@ -20,6 +20,10 @@ const AuthLayout = () => {
       .unwrap()
       .then((data) => {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("userId", String(data.userId));
+        localStorage.setItem("email", String(data.email));
         window.dispatchEvent(new Event("storage"));
         router.push("/");
       });

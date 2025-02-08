@@ -59,6 +59,7 @@ const TaskColumn = ({
   moveTask,
   setIsModalNewTaskOpen,
 }: TaskColumnProps) => {
+  const role = localStorage.getItem("role");
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "task",
     drop: (item: { id: number }) => moveTask(item.id, status),
@@ -105,6 +106,7 @@ const TaskColumn = ({
             <button
               className="flex h-6 w-6 items-center justify-center rounded bg-gray-200 dark:bg-dark-tertiary dark:text-white"
               onClick={() => setIsModalNewTaskOpen(true)}
+              disabled={role !== "Lead"}
             >
               <Plus size={16} />
             </button>

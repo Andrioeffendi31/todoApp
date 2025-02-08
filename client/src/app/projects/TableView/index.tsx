@@ -66,6 +66,8 @@ const columns: GridColDef[] = [
 ];
 
 const TableView = ({ id, setIsModalNewTaskOpen }: Props) => {
+  const role = localStorage.getItem("role");
+
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
   const {
     data: tasks,
@@ -85,6 +87,7 @@ const TableView = ({ id, setIsModalNewTaskOpen }: Props) => {
             <button
               className="flex items-center rounded bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
               onClick={() => setIsModalNewTaskOpen(true)}
+              disabled={role !== "Lead"}
             >
               Add Task
             </button>

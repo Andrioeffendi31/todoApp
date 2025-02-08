@@ -13,7 +13,6 @@ import {
 } from "@mui/x-data-grid";
 import Image from "next/image";
 import { dataGridClassNames, dataGridSxStyles } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const CustomToolbar = () => (
   <GridToolbarContainer className="toolbar flex gap-2">
@@ -47,18 +46,11 @@ const columns: GridColDef[] = [
 ];
 
 const Users = () => {
-  const router = useRouter();
   const { data: users, isLoading, isError } = useGetUsersQuery();
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError || !users) return <div>Error fetching users</div>;
-
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-    }
-  }, []);
 
   return (
     <div className="flex w-full flex-col p-8">

@@ -12,6 +12,7 @@ type Props = {
 type TaskTypeItems = "task" | "milestone" | "project";
 
 const Timeline = ({ id, setIsModalNewTaskOpen }: Props) => {
+  const role = localStorage.getItem("role");
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
   const {
     data: tasks,
@@ -88,6 +89,7 @@ const Timeline = ({ id, setIsModalNewTaskOpen }: Props) => {
           <button
             className="flex items-center rounded bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
             onClick={() => setIsModalNewTaskOpen(true)}
+            disabled={role !== "Lead"}
           >
             Add New Task
           </button>

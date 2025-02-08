@@ -12,7 +12,6 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { dataGridClassNames, dataGridSxStyles } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const CustomToolbar = () => (
   <GridToolbarContainer className="toolbar flex gap-2">
@@ -33,18 +32,11 @@ const columns: GridColDef[] = [
 ];
 
 const Teams = () => {
-  const router = useRouter();
   const { data: teams, isLoading, isError } = useGetTeamsQuery();
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError || !teams) return <div>Error fetching teams</div>;
-
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-    }
-  }, []);
 
   return (
     <div className="flex w-full flex-col p-8">

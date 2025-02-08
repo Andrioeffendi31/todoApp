@@ -11,14 +11,14 @@ export const register = async (req: Request, res: Response) => {
   const user = await prisma.user.create({
     data: { email, passwordHash: hashedPassword, username, role },
   });
-  res.json({ token: generateToken(user.userId) });
+  res.json({ token: generateToken(user.userId), username, role, userId: user.userId, email});
 };
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await prisma.user.findUnique({ where: { email } });
   if (user && await bcrypt.compare(password, user.passwordHash)) {
-    res.json({ token: generateToken(user.userId) });
+    res.json({ token: generateToken(user.userId), username: user.username, role: user.role, userId: user.userId, email: user.email });
   } else {
     res.status(401).json({ message: 'Invalid credentials' });
   }

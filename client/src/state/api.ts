@@ -76,14 +76,14 @@ export const api = createApi({
   reducerPath: "api",
   tagTypes: ["Projects", "Tasks", "Users", "Teams"],
   endpoints: (build) => ({
-    login: build.mutation<{ token: string }, { email: string; password: string }>({
+    login: build.mutation<{ token: string, username: string, role: string, userId: number, email: string }, { email: string; password: string }>({
       query: ({ email, password }) => ({
         url: "auth/login",
         method: "POST",
         body: { email, password },
       }),
     }),
-    register: build.mutation<{ token: string }, { email: string; password: string; username: string, role: string }>({
+    register: build.mutation<{ token: string, username: string, role: string, userId: number, email: string }, { email: string; password: string; username: string; role: string }>({
       query: ({ email, password, username, role }) => ({
         url: "auth/register",
         method: "POST",
