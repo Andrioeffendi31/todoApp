@@ -55,9 +55,6 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
     setAuthorUserId("");
     setAssignedUserId("");
     setProjectId("");
-
-    window.location.reload();
-
     onClose();
   };
 
