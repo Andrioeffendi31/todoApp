@@ -5,12 +5,13 @@ import {
   getUserTasks,
   updateTaskStatus,
 } from "../controllers/taskController";
+import { authenticate } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/", getTasks);
-router.post("/", createTask);
-router.patch("/:taskId/status", updateTaskStatus);
-router.get("/user/:userId", getUserTasks);
+router.get("/", authenticate, getTasks);
+router.post("/", authenticate, createTask);
+router.patch("/:taskId/status", authenticate, updateTaskStatus);
+router.get("/user/:userId", authenticate, getUserTasks);
 
 export default router;
