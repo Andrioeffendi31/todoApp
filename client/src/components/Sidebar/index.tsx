@@ -37,13 +37,13 @@ const Sidebar = () => {
   const isSidebarOpen = useAppSelector((state) => state.global.isSidebarOpen);
 
   const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl 
-  transition-all duration-300 ease-in-out h-full z-40 dark:bg-black overflow-y-auto bg-white
+  transition-all duration-300 ease-in-out z-40 dark:bg-black overflow-y-auto bg-white
   ${isSidebarOpen ? "w-64 opacity-100 visible" : "w-0 opacity-0 invisible"}
   `;
 
   return (
     <div className={sidebarClassNames}>
-      <div className="flex h-[100%] w-full flex-col justify-start">
+      <div className="flex h-[100%] w-full mb-8 overflow-x-hidden flex-col justify-start">
         {/* top logo */}
         <div className="z-50 flex min-h-[56px] w-64 items-center justify-between bg-white px-6 pt-3 dark:bg-black">
           <div className="text-xl font-bold text-gray-800 dark:text-white">
@@ -96,13 +96,13 @@ const Sidebar = () => {
         <div
           className={`flex flex-col transition-all duration-300 ${
             showProjects ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-          } overflow-hidden`}
+          }`}
         >
           {projects ? (
             projects.map((project) => (
               <SidebarLink
                 key={project.id}
-                href={`/project/${project.id}`}
+                href={`/projects/${project.id}`}
                 icon={Briefcase}
                 label={project.name}
               />
@@ -117,7 +117,7 @@ const Sidebar = () => {
         {/* priorities links */}
         <button
           onClick={() => setShowPriority((prev) => !prev)}
-          className="flex w-full items-center justify-between px-8 py-3 text-gray-500 overflow-hidden"
+          className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
         >
           <span className="">Priority</span>
           <ChevronIcon isOpen={showPriority} />
@@ -125,7 +125,7 @@ const Sidebar = () => {
         <div
           className={`flex flex-col transition-all duration-300 ${
             showPriority ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-          } overflow-hidden`}
+          }`}
         >
           <SidebarLink
             href="/priority/urgent"
@@ -171,7 +171,9 @@ const SidebarLink = ({ href, icon: Icon, label }: SidebarLinkProps) => {
         {isActive && (
           <div className="absolute left-0 top-0 h-[100%] w-[5px] bg-blue-200" />
         )}
-        <Icon className="line-clamp-1 h-6 w-6 text-gray-800 dark:text-gray-100" />
+        <div className="flex-shrink-0 h-6 w-6">
+          <Icon className="h-full w-full text-gray-800 dark:text-gray-100" />
+        </div>
         <span
           className={`line-clamp-1 font-medium text-gray-800 dark:text-gray-100`}
         >

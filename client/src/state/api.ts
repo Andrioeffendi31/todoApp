@@ -1,47 +1,35 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
-export interface Project {
+export type Project = {
   id: number;
   name: string;
   description?: string;
   startDate?: string;
   endDate?: string;
-}
+};
 
-export enum Priority {
-  Urgent = "Urgent",
-  High = "High",
-  Medium = "Medium",
-  Low = "Low",
-  Backlog = "Backlog",
-}
+export type Priority = "Urgent" | "High" | "Medium" | "Low" | "Backlog";
+export type Status = "To Do" | "Work In Progress" | "Under Review" | "Completed";
 
-export enum Status {
-  ToDo = "To Do",
-  WorkInProgress = "Work In Progress",
-  UnderReview = "Under Review",
-  Completed = "Completed",
-}
-
-export interface User {
+export type User = {
   userId?: number;
   username: string;
   email: string;
   profilePictureUrl?: string;
   cognitoId?: string;
   teamId?: number;
-}
+};
 
-export interface Attachment {
+export type Attachment = {
   id: number;
   fileURL: string;
   fileName: string;
   taskId: number;
   uploadedById: number;
-}
+};
 
-export interface Task {
+export type Task = {
   id: number;
   title: string;
   description?: string;
@@ -59,20 +47,20 @@ export interface Task {
   assignee?: User;
   comments?: Comment[];
   attachments?: Attachment[];
-}
+};
 
-export interface SearchResults {
+export type SearchResults = {
   tasks?: Task[];
   projects?: Project[];
   users?: User[];
-}
+};
 
-export interface Team {
+export type Team = {
   teamId: number;
   teamName: string;
   productOwnerUserId?: number;
   projectManagerUserId?: number;
-}
+};
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
