@@ -16,8 +16,8 @@ export type User = {
   username: string;
   email: string;
   profilePictureUrl?: string;
-  cognitoId?: string;
   teamId?: number;
+  role?: string;
 };
 
 export type Attachment = {
