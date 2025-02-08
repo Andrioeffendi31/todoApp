@@ -7,8 +7,9 @@ import {
   useGetProjectsQuery,
   useGetTasksQuery,
 } from "@/state/api";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppSelector } from "../redux";
+import { useRouter } from "next/navigation";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Header from "@/components/Header";
 import {
@@ -36,20 +37,28 @@ const taskColumns: GridColDef[] = [
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const HomePage = () => {
+  const router = useRouter();
+
   const {
     data: tasks,
     isLoading: tasksLoading,
     isError: tasksError,
   } = useGetTasksQuery({ projectId: parseInt("1") });
+
   const { data: projects, isLoading: isProjectsLoading } =
     useGetProjectsQuery();
 
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
-  if (tasksLoading || isProjectsLoading) return <div>Loading..</div>;
-  if (tasksError || !tasks || !projects) return <div>Error fetching data</div>;
+  useEffect(() => {
+    if (tasksError) {
+      router.push("/login");
+    }
+  }, [tasksError, router]);
 
-  const priorityCount = tasks.reduce(
+  if (tasksLoading || isProjectsLoading) return <div>Loading..</div>;
+
+  const priorityCount = (tasks ?? []).reduce(
     (acc: Record<string, number>, task: Task) => {
       const { priority } = task;
       acc[priority as Priority] = (acc[priority as Priority] || 0) + 1;
@@ -63,7 +72,7 @@ const HomePage = () => {
     count: priorityCount[key],
   }));
 
-  const statusCount = projects.reduce(
+  const statusCount = (projects ?? []).reduce(
     (acc: Record<string, number>, project: Project) => {
       const status = project.endDate ? "Completed" : "Active";
       acc[status] = (acc[status] || 0) + 1;

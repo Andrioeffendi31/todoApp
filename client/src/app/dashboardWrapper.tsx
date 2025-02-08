@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import StoreProvider, { useAppSelector } from "./redux";
+import AuthLayout from "./authLayout";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const isSidebarOpen = useAppSelector(
@@ -17,7 +18,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-  });
+  }, [isDarkMode]);
 
   return (
     <div className="flex min-h-screen w-full bg-gray-50 text-gray-900">
@@ -35,9 +36,32 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <StoreProvider>
-      <DashboardLayout>{children}</DashboardLayout>
+      {token ? (
+        <DashboardLayout>{children}</DashboardLayout>
+      ) : (
+        <AuthLayout />
+      )}
     </StoreProvider>
   );
 };

@@ -1,13 +1,21 @@
-import React from "react";
-import { Menu, Moon, Search, Settings, Sun } from "lucide-react";
+import React, { useEffect } from "react";
+import { LogOut, Menu, Moon, Search, Settings, Sun } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsDarkMode, setIsSidebarOpen } from "@/state";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const isSidebarOpen = useAppSelector((state) => state.global.isSidebarOpen);
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.dispatchEvent(new Event("storage")); // Trigger storage event
+    router.push("/login");
+  };
 
   return (
     <div className="flex items-center justify-between bg-white px-4 py-3 dark:bg-black">
@@ -43,16 +51,16 @@ const Navbar = () => {
             <Moon className="h-6 w-6 cursor-pointer dark:text-white" />
           )}
         </button>
-        <Link
-          href="/settings"
+        <button
+          onClick={handleLogout}
           className={
             isDarkMode
               ? "h-min w-min rounded-md p-2 dark:hover:bg-gray-700"
               : "h-min w-min rounded-md p-2 dark:hover:bg-gray-100"
           }
         >
-          <Settings className="h-6 w-6 cursor-pointer dark:text-white" />
-        </Link>
+          <LogOut className="h-6 w-6 cursor-pointer dark:text-white" />
+        </button>
         <div className="ml-2 mr-5 hidden min-h-[2em] w-[0.1rem] bg-gray-200 md:inline-block"></div>
       </div>
     </div>

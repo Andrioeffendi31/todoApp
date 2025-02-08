@@ -6,9 +6,11 @@ import TaskCard from "@/components/TaskCard";
 import UserCard from "@/components/UserCard";
 import { useSearchQuery } from "@/state/api";
 import { debounce } from "lodash";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Search = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const {
     data: searchResults,
@@ -28,6 +30,12 @@ const Search = () => {
   useEffect(() => {
     return handleSearch.cancel;
   }, [handleSearch.cancel]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+    }
+  }, []);
 
   return (
     <div className="p-8">

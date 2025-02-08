@@ -1,7 +1,11 @@
+"use client";
+
 import Header from "@/components/Header";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 const Settings = () => {
+  const router = useRouter();
   const userSettings = {
     username: "johndoe",
     email: "john.doe@example.com",
@@ -12,6 +16,12 @@ const Settings = () => {
   const labelStyles = "block text-sm font-medium dark:text-white";
   const textStyles =
     "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 dark:text-white";
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+    }
+  }, []);
 
   return (
     <div className="p-8">

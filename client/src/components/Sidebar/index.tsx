@@ -25,14 +25,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import path from "path";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const Sidebar = () => {
+  const router = useRouter();
   const [showProjects, setShowProjects] = useState(true);
   const [showPriority, setShowPriority] = useState(true);
 
-  const { data: projects, isFetching } = useGetProjectsQuery();
+  const { data: projects, isFetching, isError } = useGetProjectsQuery();
   const dispatch = useAppDispatch();
   const isSidebarOpen = useAppSelector((state) => state.global.isSidebarOpen);
 
@@ -41,9 +42,15 @@ const Sidebar = () => {
   ${isSidebarOpen ? "w-64 opacity-100 visible" : "w-0 opacity-0 invisible"}
   `;
 
+  useEffect(() => {
+    if (isError) {
+      router.push("/login");
+    }
+  }, [isError, router]);
+
   return (
     <div className={sidebarClassNames}>
-      <div className="flex h-[100%] w-full mb-8 overflow-x-hidden flex-col justify-start">
+      <div className="mb-8 flex h-[100%] w-full flex-col justify-start overflow-x-hidden">
         {/* top logo */}
         <div className="z-50 flex min-h-[56px] w-64 items-center justify-between bg-white px-6 pt-3 dark:bg-black">
           <div className="text-xl font-bold text-gray-800 dark:text-white">
@@ -171,7 +178,7 @@ const SidebarLink = ({ href, icon: Icon, label }: SidebarLinkProps) => {
         {isActive && (
           <div className="absolute left-0 top-0 h-[100%] w-[5px] bg-blue-200" />
         )}
-        <div className="flex-shrink-0 h-6 w-6">
+        <div className="h-6 w-6 flex-shrink-0">
           <Icon className="h-full w-full text-gray-800 dark:text-gray-100" />
         </div>
         <span

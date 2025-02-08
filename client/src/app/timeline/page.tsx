@@ -5,11 +5,13 @@ import Header from "@/components/Header";
 import { useGetProjectsQuery } from "@/state/api";
 import { DisplayOption, Gantt, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
-import React, { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useMemo, useState } from "react";
 
 type TaskTypeItems = "task" | "milestone" | "project";
 
 const Timeline = () => {
+  const router = useRouter();
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
   const { data: projects, isLoading, isError } = useGetProjectsQuery();
 
@@ -17,6 +19,12 @@ const Timeline = () => {
     viewMode: ViewMode.Month,
     locale: "en-US",
   });
+
+  useEffect(() => {
+    if (isError) {
+      router.push("/login");
+    }
+  }, [isError, router]);
 
   const ganttTasks = useMemo(() => {
     return (
